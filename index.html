@@ -117,14 +117,14 @@
 
     <a
       class="button"
-      href="florn://auth/callback"
+      href="#"
       id="return-button"
     >
       Return to Florn
     </a>
 
     <div class="note" id="fallback-message" hidden>
-      If Florn does not open, close this page and open Florn manually.
+      If Florn does not open, close this page and open the app manually.
     </div>
   </main>
 
@@ -132,6 +132,33 @@
     const returnButton = document.getElementById('return-button');
     const fallbackMessage =
       document.getElementById('fallback-message');
+
+    function buildAppCallbackUrl() {
+      const appUrl = new URL('florn://auth/callback');
+
+      const queryParams = new URLSearchParams(
+        window.location.search
+      );
+
+      const hashParams = new URLSearchParams(
+        window.location.hash.startsWith('#')
+          ? window.location.hash.substring(1)
+          : window.location.hash
+      );
+
+      for (const [key, value] of queryParams.entries()) {
+        appUrl.searchParams.set(key, value);
+      }
+
+      for (const [key, value] of hashParams.entries()) {
+        appUrl.searchParams.set(key, value);
+      }
+
+      return appUrl.toString();
+    }
+
+    const callbackUrl = buildAppCallbackUrl();
+    returnButton.href = callbackUrl;
 
     returnButton.addEventListener('click', () => {
       setTimeout(() => {
