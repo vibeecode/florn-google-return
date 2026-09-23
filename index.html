@@ -13,7 +13,6 @@
       --background: #fbf8f2;
       --surface: #ffffff;
       --primary: #24483b;
-      --terracotta: #b8674d;
       --text: #252525;
       --muted: #718077;
       --border: #e9ded2;
@@ -113,19 +112,32 @@
 
     <p>
       Your Google account has been connected successfully.
-      Return to the Florn app to continue.
+      Tap the button below to return to the Florn app.
     </p>
 
     <a
       class="button"
       href="florn://auth/callback"
+      id="return-button"
     >
       Return to Florn
     </a>
 
-    <div class="note">
-      If the app does not open, close this page and open Florn manually.
+    <div class="note" id="fallback-message" hidden>
+      If Florn does not open, close this page and open Florn manually.
     </div>
   </main>
+
+  <script>
+    const returnButton = document.getElementById('return-button');
+    const fallbackMessage =
+      document.getElementById('fallback-message');
+
+    returnButton.addEventListener('click', () => {
+      setTimeout(() => {
+        fallbackMessage.hidden = false;
+      }, 1200);
+    });
+  </script>
 </body>
 </html>
