@@ -6,7 +6,6 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   />
-
   <title>Return to Florn</title>
 
   <style>
@@ -83,15 +82,13 @@
 
     h1 {
       margin: 0;
-      color: var(--espresso-ink);
       font-size: 28px;
       line-height: 1.15;
       font-weight: 600;
       letter-spacing: -0.45px;
     }
 
-    .subtitle {
-      margin: 12px 0 0;
+    p {
       color: var(--sand-grey);
       font-size: 15px;
       line-height: 1.5;
@@ -105,56 +102,29 @@
       justify-content: center;
       margin-top: 28px;
       padding: 0 24px;
-      border: 0;
       border-radius: 16px;
       background: var(--azure);
       color: var(--paper);
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
-      cursor: pointer;
-      transition:
-        filter 180ms ease,
-        transform 180ms ease;
-    }
-
-    .button:hover {
-      filter: brightness(0.94);
-      transform: translateY(-1px);
-    }
-
-    .button:active {
-      transform: translateY(0);
-    }
-
-    .button:focus-visible {
-      outline: 3px solid rgba(11, 140, 232, 0.28);
-      outline-offset: 3px;
-    }
-
-    .note {
-      margin: 18px 0 0;
-      color: var(--sand-grey);
-      font-size: 12px;
-      line-height: 1.4;
     }
 
     .error {
       display: none;
-      margin: 18px 0 0;
+      margin-top: 18px;
       padding: 12px;
       border-radius: 10px;
       background: var(--error-background);
       color: var(--error-text);
       font-size: 13px;
-      line-height: 1.4;
     }
   </style>
 </head>
 
 <body>
   <main class="page">
-    <section class="card" aria-labelledby="page-title">
+    <section class="card">
       <img
         class="logo"
         src="florn_logo.png"
@@ -163,10 +133,10 @@
 
       <div class="status-icon" aria-hidden="true">✓</div>
 
-      <h1 id="page-title">Google sign-in complete</h1>
+      <h1>Continue to Florn</h1>
 
-      <p class="subtitle">
-        Tap below to return to the Florn app.
+      <p>
+        Your authentication is complete. Tap below to return to the app.
       </p>
 
       <a
@@ -177,30 +147,20 @@
         Return to Florn
       </a>
 
-      <p class="note">
-        If the app does not open, make sure Florn is installed on this device.
-      </p>
-
-      <p
-        id="error-message"
-        class="error"
-        role="alert"
-      >
-        No authentication response was found. Please restart Google sign-in.
+      <p id="error-message" class="error">
+        No authentication code was found. Please restart the signup flow.
       </p>
     </section>
   </main>
 
   <script>
-    const returnButton = document.getElementById("return-to-florn");
+    const button = document.getElementById("return-to-florn");
     const errorMessage = document.getElementById("error-message");
 
     const query = window.location.search;
     const hash = window.location.hash;
 
-    const callbackUrl = `florn://auth/callback${query}${hash}`;
-
-    returnButton.href = callbackUrl;
+    button.href = `florn://auth/callback${query}${hash}`;
 
     if (!query && !hash) {
       errorMessage.style.display = "block";
