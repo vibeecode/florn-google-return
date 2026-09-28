@@ -110,6 +110,11 @@
       text-decoration: none;
     }
 
+    .button.disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
     .error {
       display: none;
       margin-top: 18px;
@@ -135,36 +140,61 @@
 
       <h1>Continue to Florn</h1>
 
-      <p>
+      <p id="status-message">
         Your authentication is complete. Tap below to return to the app.
       </p>
 
       <a
         id="return-to-florn"
         class="button"
-        href="florn://auth/callback"
+        href="#"
       >
         Return to Florn
       </a>
 
       <p id="error-message" class="error">
-        No authentication code was found. Please restart the signup flow.
+        No authentication response was found. Please restart the sign-in flow.
       </p>
     </section>
   </main>
 
   <script>
-    const button = document.getElementById("return-to-florn");
-    const errorMessage = document.getElementById("error-message");
+    (() => {
+      const button = document.getElementById("return-to-florn");
+      const errorMessage = document.getElementById("error-message");
+      const statusMessage = document.getElementById("status-message");
 
-    const query = window.location.search;
-    const hash = window.location.hash;
+      const query = window.location.search;
+      const hash = window.location.hash;
 
-    button.href = `florn://auth/callback${query}${hash}`;
+      const queryParams = new URLSearchParams(query);
+      const hasCode = queryParams.has("code");
+      const hasError = queryParams.has("error");
+      const hasHashData = hash.length > 1;
 
-    if (!query && !hash) {
-      errorMessage.style.display = "block";
-    }
+      const callbackUrl =
+        `florn://auth/callback${query}${hash}`;
+
+      const hasCallbackData =
+        hasCode ||
+        hasError ||
+        hasHashData;
+
+      if (!hasCallbackData) {
+        button.classList.add("disabled");
+        errorMessage.style.display = "block";
+        statusMessage.textContent =
+          "The authentication response is missing.";
+        return;
+      }
+
+      button.href = callbackUrl;
+
+      if (hasError) {
+        statusMessage.textContent =
+          "Authentication was not completed.";
+      }
+    })();
   </script>
 </body>
 </html>
